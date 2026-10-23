@@ -1,0 +1,106 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div style="background: var(--bg-off-white); min-height: 100vh; padding-top: 120px; padding-bottom: 80px;">
+  <div style="max-width: 1100px; margin: 0 auto; padding: 0 24px;">
+    
+    <!-- En-tête -->
+    <div style="text-align: center; margin-bottom: 60px;">
+      <a href="/" style="color: var(--bordeaux); text-decoration: none; font-size: 14px; letter-spacing: 0.1em;">&larr; {% if lang == 'fr' %}Retour à l'accueil{% else %}Back to home{% endif %}</a>
+      <h1 style="font-family: 'Cormorant Garamond', serif; font-size: 56px; color: var(--bordeaux); margin-top: 20px;">
+        {% if lang == 'fr' %}{{ service.name_fr }}{% else %}{{ service.name_en }}{% endif %}
+      </h1>
+    </div>
+
+    <!-- Contenu principal -->
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: start;">
+
+      <!-- Image principale -->
+      <div>
+        {% if service.image %}
+          <img src="{{ service.image.url }}" alt="{{ service.name_fr }}" style="width: 100%; height: auto; border-radius: 4px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); margin-bottom: 20px;">
+        {% else %}
+          <div style="width: 100%; height: 400px; background: var(--grey-light); display: flex; align-items: center; justify-content: center; color: #999; margin-bottom: 20px;">
+            Image à venir
+          </div>
+        {% endif %}
+
+        <!-- Bouton Galerie (si des photos existent) -->
+        {% if service.images.all %}
+          <button onclick="openGallery()" style="width: 100%; background: transparent; border: 1px solid var(--bordeaux); color: var(--bordeaux); padding: 14px; font-size: 13px; letter-spacing: 0.1em; cursor: pointer; font-weight: 500; transition: 0.2s;" onmouseover="this.style.background='var(--bg-off-white)'" onmouseout="this.style.background='transparent'">
+            + {% if lang == 'fr' %}Voir plus de photos{% else %}See more photos{% endif %} ({{ service.images.count }})
+          </button>
+        {% endif %}
+      </div>
+
+      <!-- Texte et Actions -->
+      <div style="padding-top: 20px;">
+        <p style="font-size: 16px; line-height: 1.8; color: var(--ink-soft); margin-bottom: 30px;">
+          {% if lang == 'fr' %}{{ service.description_fr|linebreaks }}{% else %}{{ service.description_en|linebreaks }}{% endif %}
+        </p>
+
+        {% if lang == 'fr' and service.price_fr %}
+          <div style="margin-bottom: 40px; padding: 20px; background: #fff; border-left: 3px solid var(--bordeaux);">
+            <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: #777;">Tarif indicatif</span>
+            <p style="font-size: 24px; font-family: 'Cormorant Garamond', serif; color: var(--bordeaux);">{{ service.price_fr }}</p>
+          </div>
+        {% elif lang == 'en' and service.price_en %}
+          <div style="margin-bottom: 40px; padding: 20px; background: #fff; border-left: 3px solid var(--bordeaux);">
+            <span style="font-size: 12px; text-transform: uppercase; letter-spacing: 0.1em; color: #777;">Indicative price</span>
+            <p style="font-size: 24px; font-family: 'Cormorant Garamond', serif; color: var(--bordeaux);">{{ service.price_en }}</p>
+          </div>
+        {% endif %}
+
+        <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+          <a href="/#contact" style="background: var(--bordeaux); color: #fff; padding: 16px 32px; text-decoration: none; font-size: 12px; letter-spacing: 0.1em; font-weight: 500;">
+            {% if lang == 'fr' %}Nous contacter pour ce service{% else %}Contact us for this service{% endif %}
+          </a>
+
+          {# LIGNE WHATSAPP MISE À JOUR ICI #}
+          {% if settings.whatsapp_number %}
+            <a href="https://wa.me/{{ settings.whatsapp_number }}?text={% if lang == 'fr' %}{{ settings.whatsapp_message_fr|urlencode }}%20-%20Service%20:%20{{ service.name_fr|urlencode }}{% else %}{{ settings.whatsapp_message_en|urlencode }}%20-%20Service:%20{{ service.name_en|urlencode }}{% endif %}" target="_blank" style="background: transparent; border: 1px solid var(--bordeaux); color: var(--bordeaux); padding: 16px 32px; text-decoration: none; font-size: 12px; letter-spacing: 0.1em; font-weight: 500;">
+              WhatsApp
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- MODALE GALERIE PLEIN ÉCRAN -->
+<div id="galleryModal" style="display: none; position: fixed; inset: 0; background: rgba(30,30,30,0.98); z-index: 1000; overflow-y: auto; padding: 40px 20px;">
+  <div style="max-width: 1200px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px;">
+      <h2 style="color: var(--white); font-family: 'Cormorant Garamond', serif; font-size: 32px;">
+        {% if lang == 'fr' %}{{ service.name_fr }}{% else %}{{ service.name_en }}{% endif %}
+      </h2>
+      <button onclick="closeGallery()" style="background: none; border: none; color: var(--white); font-size: 36px; cursor: pointer; line-height: 1;">&times;</button>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px;">
+      {% for img in service.images.all %}
+        <div style="background: #222; border-radius: 4px; overflow: hidden;">
+          <img src="{{ img.image.url }}" alt="{{ img.title_fr }}" style="width: 100%; height: 300px; object-fit: cover; display: block;">
+          {% if lang == 'fr' and img.title_fr %}
+            <div style="padding: 16px; text-align: center; color: var(--white); font-family: 'Jost', sans-serif; font-size: 14px; letter-spacing: 0.05em;">{{ img.title_fr }}</div>
+          {% elif lang == 'en' and img.title_en %}
+            <div style="padding: 16px; text-align: center; color: var(--white); font-family: 'Jost', sans-serif; font-size: 14px; letter-spacing: 0.05em;">{{ img.title_en }}</div>
+          {% endif %}
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<script>
+  function openGallery() {
+    document.getElementById('galleryModal').style.display = 'block';
+    document.body.style.overflow = 'hidden';
+  }
+  function closeGallery() {
+    document.getElementById('galleryModal').style.display = 'none';
+    document.body.style.overflow = 'auto';
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,135 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<section class="hero">
+  <div class="hero__bg">
+    {% if settings.hero_image %}
+      <img src="{{ settings.hero_image.url }}" alt="" style="object-position: {{ settings.hero_image_position }};">
+    {% endif %}
+  </div>
+
+  <header class="hero__header">
+    <a href="/" class="logo">
+      <span class="logo__main">LPA</span>
+      <span class="logo__sub">LIND'S PREMIUM AFFAIRS</span>
+    </a>
+
+    <nav class="nav">
+      <a href="/" class="nav__link">{% if lang == 'fr' %}Accueil{% else %}Home{% endif %}</a>
+      <!-- Lien mis à jour vers /about/ -->
+      <a href="/about/" class="nav__link">{% if lang == 'fr' %}À propos{% else %}About{% endif %}</a>
+
+      <div class="nav__dropdown">
+        <button class="nav__link">
+          {% if lang == 'fr' %}Nos services{% else %}Our services{% endif %} <span class="caret">▾</span>
+        </button>
+        <div class="dropdown-menu">
+          {% for service in services %}
+            <a href="{% url 'service_detail' service.slug %}" class="dropdown-item">
+              {% if lang == 'fr' %}{{ service.name_fr }}{% else %}{{ service.name_en }}{% endif %}
+            </a>
+          {% empty %}
+            <span class="dropdown-item" style="color: #999; font-style: italic;">Aucun service disponible</span>
+          {% endfor %}
+        </div>
+      </div>
+
+      <a href="#contact" class="nav__link">{% if lang == 'fr' %}Contact{% else %}Contact{% endif %}</a>
+    </nav>
+
+    <div class="hero__actions">
+      <div class="lang-switcher">
+        <a href="?lang=fr" class="lang-link {% if lang == 'fr' %}active{% endif %}">FR</a>
+        <span class="lang-sep">|</span>
+        <a href="?lang=en" class="lang-link {% if lang == 'en' %}active{% endif %}">EN</a>
+      </div>
+      <button class="icon-btn" aria-label="Search">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </button>
+      <button class="icon-btn" aria-label="Cart">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 7h12l-1 13H7L6 7Z"/><path d="M9 7V5a3 3 0 0 1 6 0v2"/></svg>
+      </button>
+      <button class="menu-toggle" aria-label="Menu" id="menuToggle">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </header>
+
+  {# Menu mobile #}
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="/" class="mobile-link">{% if lang == 'fr' %}Accueil{% else %}Home{% endif %}</a>
+    <!-- Lien mis à jour vers /about/ -->
+    <a href="/about/" class="mobile-link">{% if lang == 'fr' %}À propos{% else %}About{% endif %}</a>
+
+    <p class="mobile-services-title">{% if lang == 'fr' %}Nos services{% else %}Our services{% endif %}</p>
+    {% for service in services %}
+      <a href="{% url 'service_detail' service.slug %}" class="mobile-service-link">
+        {% if lang == 'fr' %}{{ service.name_fr }}{% else %}{{ service.name_en }}{% endif %}
+      </a>
+    {% endfor %}
+
+    <a href="#contact" class="mobile-link" style="color: var(--bordeaux); margin-top: 10px;">Contact</a>
+
+    <div class="mobile-lang">
+      <a href="?lang=fr" class="mobile-lang-link {% if lang == 'fr' %}active{% endif %}">FR</a>
+      <span class="mobile-lang-sep">|</span>
+      <a href="?lang=en" class="mobile-lang-link {% if lang == 'en' %}active{% endif %}">EN</a>
+    </div>
+  </div>
+
+  {# Texte du Hero #}
+  <div class="hero__panel">
+    <p class="hero__eyebrow">
+      {% if lang == 'fr' %}{{ settings.hero_eyebrow_fr }}{% else %}{{ settings.hero_eyebrow_en }}{% endif %}
+    </p>
+    <h1 class="hero__title">
+      {% if lang == 'fr' %}{{ settings.hero_title_fr|safe }}{% else %}{{ settings.hero_title_en|safe }}{% endif %}
+    </h1>
+    <span class="hero__rule"></span>
+    <p class="hero__subtitle">
+      {% if lang == 'fr' %}{{ settings.hero_subtitle_fr }}{% else %}{{ settings.hero_subtitle_en }}{% endif %}
+    </p>
+    <a href="{{ settings.hero_cta_url }}" class="hero__cta">
+      {% if lang == 'fr' %}{{ settings.hero_cta_fr }}{% else %}{{ settings.hero_cta_en }}{% endif %}
+      <span class="arrow">→</span>
+    </a>
+  </div>
+</section>
+
+{# SECTION CONTACT (Le formulaire sera ajouté ici plus tard) #}
+<section id="contact" style="background: var(--bordeaux); padding: 100px 24px; color: var(--white);">
+  <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+    <h2 style="font-family: 'Cormorant Garamond', serif; font-size: 48px; margin-bottom: 20px;">
+      {% if lang == 'fr' %}Travaillons ensemble{% else %}Let's work together{% endif %}
+    </h2>
+    <p style="font-size: 16px; opacity: 0.8; margin-bottom: 40px;">
+      {% if lang == 'fr' %}Discutons de vos besoins et voyons comment nous pouvons élever vos expériences.{% else %}Let's discuss your needs and see how we can elevate your experiences.{% endif %}
+    </p>
+
+    <div style="display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;">
+      {% if settings.whatsapp_number %}
+        <a href="https://wa.me/{{ settings.whatsapp_number }}?text={% if lang == 'fr' %}{{ settings.whatsapp_message_fr|urlencode }}{% else %}{{ settings.whatsapp_message_en|urlencode }}{% endif %}" target="_blank" style="display: inline-flex; align-items: center; gap: 10px; background: #25D366; color: white; padding: 16px 32px; text-decoration: none; font-size: 13px; letter-spacing: 0.1em; font-weight: 500; border-radius: 2px;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          WhatsApp
+        </a>
+      {% endif %}
+
+      {% if settings.contact_email %}
+        <a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ settings.contact_email }}" target="_blank" style="display: inline-flex; align-items: center; gap: 10px; background: transparent; border: 1px solid rgba(255,255,255,0.4); color: white; padding: 16px 32px; text-decoration: none; font-size: 13px; letter-spacing: 0.1em; font-weight: 500; border-radius: 2px; transition: background 0.2s;" onmouseover="this.style.background='rgba(255,255,255,0.1)'" onmouseout="this.style.background='transparent'">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          {% if lang == 'fr' %}Nous écrire{% else %}Email us{% endif %}
+        </a>
+      {% endif %}
+    </div>
+  </div>
+</section>
+
+<script>
+  const toggle = document.getElementById('menuToggle');
+  const menu = document.getElementById('mobileMenu');
+  toggle.addEventListener('click', () => {
+    toggle.classList.toggle('active');
+    menu.classList.toggle('active');
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,33 @@
+# Environnement virtuel
+venv/
+.venv/
+env/
+
+# Fichiers Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg-info/
+.pytest_cache/
+
+# Base de données
+db.sqlite3
+*.sqlite3
+
+# Fichiers média uploadés par l'utilisateur
+media/
+
+# Fichiers statiques collectés
+staticfiles/
+
+# Variables d'environnement
+.env
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/

@@ -1,0 +1,69 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}LPA — Lind's Premium Affairs{% endblock %}</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Jost:wght@300;400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+  {% block content %}{% endblock %}
+
+  <!-- FOOTER GLOBAL -->
+  <footer style="background: #111; color: #fff; padding: 80px 24px 40px; border-top: 3px solid var(--bordeaux);">
+    <div style="max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 60px; margin-bottom: 60px;">
+
+      <!-- Colonne 1 : Logo & Slogan -->
+      <div>
+        <a href="/" style="text-decoration: none; display: inline-block; margin-bottom: 20px;">
+          <span style="display: block; font-family: 'Cormorant Garamond', serif; font-size: 36px; color: #fff; font-weight: 600; line-height: 1;">LPA</span>
+          <span style="display: block; font-size: 9px; letter-spacing: 0.26em; color: #aaa; margin-top: 4px;">LIND'S PREMIUM AFFAIRS</span>
+        </a>
+        <p style="font-family: 'Cormorant Garamond', serif; font-size: 22px; color: var(--bordeaux); font-style: italic; margin-bottom: 20px;">
+          We Elevate Experiences.
+        </p>
+        <p style="color: #888; font-size: 14px; line-height: 1.6; max-width: 300px;">
+          {% if lang == 'fr' %}Une entreprise multisectorielle qui améliore les expériences grâce à la qualité, l'élégance et l'attention portée aux détails.{% else %}A multi-sector company elevating experiences through quality, elegance, and attention to detail.{% endif %}
+        </p>
+      </div>
+
+      <!-- Colonne 2 : Liens rapides -->
+      <div>
+        <h4 style="font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; color: #ccc;">{% if lang == 'fr' %}Navigation{% else %}Navigation{% endif %}</h4>
+        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px;">
+          <li><a href="/" style="color: #888; text-decoration: none; font-size: 14px; transition: 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#888'">{% if lang == 'fr' %}Accueil{% else %}Home{% endif %}</a></li>
+          <li><a href="/about/" style="color: #888; text-decoration: none; font-size: 14px; transition: 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#888'">{% if lang == 'fr' %}À propos{% else %}About{% endif %}</a></li>
+          <li><a href="/#services" style="color: #888; text-decoration: none; font-size: 14px; transition: 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#888'">{% if lang == 'fr' %}Nos services{% else %}Our services{% endif %}</a></li>
+          <li><a href="/#contact" style="color: #888; text-decoration: none; font-size: 14px; transition: 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#888'">Contact</a></li>
+        </ul>
+      </div>
+
+      <!-- Colonne 3 : Contact -->
+      <div>
+        <h4 style="font-size: 14px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 20px; color: #ccc;">Contact</h4>
+        <ul style="list-style: none; padding: 0; display: flex; flex-direction: column; gap: 12px;">
+          {% if settings.contact_email %}
+            <li><a href="https://mail.google.com/mail/?view=cm&fs=1&to={{ settings.contact_email }}" target="_blank" style="color: #888; text-decoration: none; font-size: 14px; transition: 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#888'">{{ settings.contact_email }}</a></li>
+          {% endif %}
+          {% if settings.whatsapp_number %}
+            <li><a href="https://wa.me/{{ settings.whatsapp_number }}" target="_blank" style="color: #888; text-decoration: none; font-size: 14px; transition: 0.2s;" onmouseover="this.style.color='#fff'" onmouseout="this.style.color='#888'">WhatsApp Business</a></li>
+          {% endif %}
+          <li style="color: #888; font-size: 14px;">Cameroun</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bas du footer -->
+    <div style="max-width: 1100px; margin: 0 auto; border-top: 1px solid #333; padding-top: 20px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+      <p style="color: #666; font-size: 12px;">&copy; 2026 LPA — Lind's Premium Affairs. {% if lang == 'fr' %}Tous droits réservés.{% else %}All rights reserved.{% endif %}</p>
+      <p style="color: #666; font-size: 12px;">{% if lang == 'fr' %}Mentions légales{% else %}Legal mentions{% endif %}</p>
+    </div>
+  </footer>
+</body>
+</html>
