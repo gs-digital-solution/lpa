@@ -12,11 +12,15 @@
 
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* LOCK ANTI-SCROLL HORIZONTAL */
 html, body {
   font-family: 'Jost', sans-serif;
   color: var(--ink);
   background: var(--bg-off-white);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden; /* Empêche le scroll horizontal */
+  width: 100%;
+  max-width: 100vw;
 }
 
 /* ---------- HERO ---------- */
@@ -153,11 +157,10 @@ html, body {
 
 .nav {
   display: flex;
-  gap: 16px; /* Espacement entre les boutons */
+  gap: 16px;
   align-items: center;
 }
 
-/* TOUS les liens de la nav sont maintenant des boutons bordeaux */
 .nav__link {
   font-size: 13px;
   letter-spacing: 0.05em;
@@ -177,16 +180,11 @@ html, body {
   font-family: inherit;
 }
 
-.nav__link:hover {
-  background: var(--bordeaux-dark);
-}
-
+.nav__link:hover { background: var(--bordeaux-dark); }
 .caret { font-size: 10px; opacity: 0.9; }
 
 /* Menu Déroulant */
-.nav__dropdown {
-  position: relative;
-}
+.nav__dropdown { position: relative; }
 .dropdown-menu {
   position: absolute;
   top: 100%;
@@ -254,16 +252,39 @@ html, body {
 .lang-link.active, .lang-link:hover { opacity: 1; }
 .lang-sep { opacity: 0.3; font-size: 11px; }
 
+/* ---------- FOOTER ---------- */
+.footer-grid {
+  max-width: 1100px;
+  margin: 0 auto 60px auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 60px;
+}
+
+.footer-bottom {
+  max-width: 1100px;
+  margin: 0 auto;
+  border-top: 1px solid #333;
+  padding-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
 /* ---------- RESPONSIVE ---------- */
 @media (max-width: 992px) {
   .hero__header { padding: 22px 32px; }
   .nav { gap: 10px; }
   .nav__link { font-size: 12px; padding: 8px 14px; }
   .logo__main { font-size: 32px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 40px; }
 }
 
 @media (max-width: 768px) {
-  .hero { min-height: 100vh; }
+  /* Le Hero s'adapte en hauteur au lieu de forcer 100vh */
+  .hero { min-height: 100vh; height: auto; padding-bottom: 40px; }
   .hero__header { grid-template-columns: 1fr auto; padding: 16px 20px; }
   .nav { display: none; }
   .lang-switcher { display: none; }
@@ -273,13 +294,25 @@ html, body {
     background: linear-gradient(180deg, rgba(249, 248, 246, 0.55) 0%, rgba(249, 248, 246, 0) 25%, rgba(249, 248, 246, 0.95) 70%);
   }
 
+  /* Le panneau passe en relative pour pousser le contenu vers le bas sans déborder */
   .hero__panel {
-    top: auto; bottom: 0; transform: none; width: 100%; padding: 0 24px 28px;
+    position: relative;
+    top: auto;
+    bottom: auto;
+    margin-top: 50vh; /* Démarre à la moitié de l'écran */
+    transform: none;
+    width: 100%;
+    padding: 0 24px 28px;
   }
+
   .logo__main { font-size: 28px; }
   .hero__title { font-size: 32px; }
   .hero__subtitle { font-size: 14px; }
   .hero__cta { width: 100%; justify-content: center; }
+
+  /* Footer sur 1 colonne */
+  .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+  .footer-bottom { flex-direction: column; text-align: center; }
 
   /* Hamburger */
   .menu-toggle { display: flex; flex-direction: column; justify-content: center; gap: 5px; width: 28px; height: 28px; background: none; border: none; cursor: pointer; padding: 0; }
